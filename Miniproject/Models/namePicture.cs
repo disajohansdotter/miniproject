@@ -11,7 +11,7 @@ namespace Miniproject.Models
         [Key]
         public int pictureID { get; set; }
 
-        public UrlAttribute url { get; set; }
+        public string url { get; set; }
 
         public string pictureWord { get; set; }
     }

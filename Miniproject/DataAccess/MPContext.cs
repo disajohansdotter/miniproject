@@ -17,7 +17,7 @@ namespace Miniproject.DataAccess
         public DbSet<TrophyRoom> Trophyrooms { get; set; }
 
         //Not Mapped
-        public DbSet<challengeStep> challengeSteps { get; set; }
+        //public DbSet<challengeStep> challengeSteps { get; set; }
 
         public MPContext() : base("Miniproject") { }
 

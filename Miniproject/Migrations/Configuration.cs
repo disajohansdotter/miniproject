@@ -9,7 +9,7 @@ namespace Miniproject.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
         }
 
         protected override void Seed(Miniproject.DataAccess.MPContext context)

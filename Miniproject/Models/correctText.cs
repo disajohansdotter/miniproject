@@ -11,7 +11,7 @@ namespace Miniproject.Models
         [Key]
         public int correctTextID { get; set; }
 
-        public string correctText { get; set; }
+        public string cText { get; set; }
 
         public string punctuation { get; set; }
     }
