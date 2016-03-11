@@ -10,8 +10,11 @@ namespace Miniproject.Models
     [NotMapped]
     public class challengeStep
     {
+        [NotMapped]
         public int challengeType { get; set; }
+        [NotMapped]
         public int currentStep { get; set; }
+        [NotMapped]
         public int score { get; set; }
     }
 }
