@@ -13,7 +13,7 @@ Add-Migration initial -Force
 Update-database -force -Verbose
 
 -force
-Disa
+Disa2
 
 
 
