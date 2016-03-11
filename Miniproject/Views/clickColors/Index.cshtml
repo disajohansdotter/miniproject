@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Miniproject.Models.clickColor>
+
+@{
+    ViewBag.Title = "Index";
+    AjaxOptions options = new AjaxOptions { };
+}
+
+<h2>Index</h2>
+@using (Ajax.BeginForm("Answer", "clickColor", options, htmlAttributes: new { @id = "update-form" }))
+{
+        <div>
+        <h4>namePicture</h4>
+        <hr />
+        <table>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <button type="button" style="background-color:@item.color">@item.color</button>
+                    @*@Html.DisplayFor(modelItem => item.color)*@
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.colorWord)
+                </td>
+            </tr>
+        }
+        </table>
+</div>
+    <p>@ViewBag.rightColor.color</p>
+}
+

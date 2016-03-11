@@ -12,6 +12,8 @@ namespace Miniproject.Models
         [Key]
         public int trophyRoomID { get; set; }
 
+        public string challengeType { get; set; }
+
         public string user { get; set; }
 
         public int challengePoints { get; set; }
