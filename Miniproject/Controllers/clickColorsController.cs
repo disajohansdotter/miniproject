@@ -34,8 +34,14 @@ namespace Miniproject.Controllers
 
             ViewBag.rightColor = (clickColor)randomColor;
 
+
+            var unsortedColors = db.clickColors
+                  .OrderBy(c => Guid.NewGuid())
+                  .ToList();
+
             //return View((clickColor)randomColor);
-            return View(db.clickColors.ToList());
+            //return View(db.clickColors.ToList());
+            return View(unsortedColors);
         }
 
      
