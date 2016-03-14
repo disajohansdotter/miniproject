@@ -18,7 +18,6 @@ namespace Miniproject.Controllers
         // GET: clickColors
         public ActionResult Index()
         {
-
             // CATION !!!!! : Remove this when mainform created
             //Fake challange setp
             List<challengeStep> MySession = new List<challengeStep>();
@@ -26,21 +25,23 @@ namespace Miniproject.Controllers
 
             Session["MySession"] = MySession;
 
-
             //Get rando color Row
             var randomColor = db.clickColors
                   .OrderBy(c => Guid.NewGuid())
                   .FirstOrDefault();
 
             ViewBag.rightColor = (clickColor)randomColor;
-
+            Session["rightColor"] = ViewBag.rightColor.color;
 
             var unsortedColors = db.clickColors
                   .OrderBy(c => Guid.NewGuid())
                   .ToList();
 
-            //return View((clickColor)randomColor);
-            //return View(db.clickColors.ToList());
+            if (Session["Score"] == null)
+            {
+                Session["Score"] = 0;
+            }
+
             return View(unsortedColors);
         }
 
@@ -49,14 +50,8 @@ namespace Miniproject.Controllers
 
         // GET: clickColors/Delete/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Answer(int? id)
+        public ActionResult Answer(string id, string command)
         {
-
-            //if (String.IsNullOrEmpty(p_answer))
-            //{
-            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            //}
 
             //Manage Session list and variables
             List<challengeStep> MySession;
@@ -67,13 +62,14 @@ namespace Miniproject.Controllers
             temp_currentStep++;
             //END Manage Session list and variables
 
-            bool mySuccess;
+            bool mySuccess = false;
 
             // If there is a match
-            if (1 == 1) //wrong way
+            if (command == Session["rightColor"].ToString()) //wrong way
             {
                 mySuccess = true;
                 MySession.Add(new challengeStep { challengeType = temp_challengeType, currentStep = temp_currentStep, score = 1 });
+                Session["Score"] = (int)Session["Score"] + 1;
             }
             else {// no match add 
                 mySuccess = false;
@@ -82,11 +78,7 @@ namespace Miniproject.Controllers
 
             Session["MySession"] = MySession;
 
-
-            return Content(mySuccess.ToString());
-
-            //return RedirectToRoute(new RouteAttribute()); // Add redictrect
-            //return RedirectToAction("Index");
+            return RedirectToAction("Index");
         }
 
 

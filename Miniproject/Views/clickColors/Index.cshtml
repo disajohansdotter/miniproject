@@ -5,9 +5,8 @@
     AjaxOptions options = new AjaxOptions { };
 }
 
-<h2>Index</h2>
-@using (Ajax.BeginForm("Answer", "clickColor", options, htmlAttributes: new { @id = "update-form" }))
-{
+<h2>Choose right color</h2>
+@using (Ajax.BeginForm("Answer", "clickColor", options, htmlAttributes: new { @id = "update-form" })){
     <div>
     <h4>@ViewBag.rightColor.color ?</h4>
     <hr />
@@ -16,12 +15,14 @@
             @foreach (var item in Model)
             {
                 <td>
-                    <button type="button" style="width:40px;height:40px; background-color:@item.color" value="@item.color"></button>
-                    @*@Html.DisplayFor(modelItem => item.color)*@
+                    <input type="submit" name="command" style="font-size: 0; line-height: 0; width:40px;height:40px; background-color:@item.color" value="@item.color" />
                 </td>
             }
         </tr>
         </table>
+        <br />
+        <p>Score: @Session["Score"]</p>
+        <br />
 </div>
 }
 
