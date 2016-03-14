@@ -18,29 +18,43 @@ var correcttext = angular.module("correcttext", []);
 
 correcttext.controller("CorrectTextController", function ($scope, $http)
 {
-    
+    $scope.playerInput = ""; // to prevent error when sending undefined object.
     $scope.incompleteText = "";
     $scope.correctText = "";
-    $scope.challengeCount = 0;
-	$http({
-	 	method: 'GET',
-	 	url: '/correctTexts/GetChallenges'
+    $scope.currentChallenge = Object;
+    $scope.challengeIndex = 0;
+    $scope.challengeCount = 1;
+    $scope.maxChallengesToDo = 15;
+    $scope.randomChallenge = true;
+    $scope.score = 0;
+    $scope.maxScore = 0;
+    $scope.showcorrectanswer = false;
+    $scope.showchallenge = true;
 
-	 }).then(function successCallback(response)
-	 {
-	     $scope.challengeDb = response.data[0];
+    $scope.totalScore = 0;
+    $scope.totalScoreMax = 0;
 
-	     $scope.incompleteText = $scope.challengeDb.punctuation;
-	     $scope.correctText = $scope.challengeDb.cText;
+    $scope.fetchNewChallengeFromDatabase = function ()
+    {
+        $http({
+            method: 'GET',
+            url: '/correctTexts/GetChallenges'
 
-	     console.log($scope.challengeDb);
-	     console.log("Got the data!");
-	 },
-	 function failureCallback(response)
-	 {
-	     console.log("Failed to get the data.");
-	 });
-    
+        }).then(function successCallback(response) {
+            $scope.challengeDb = response.data;
+            $scope.currentChallenge = $scope.challengeDb[$scope.challengeIndex];
+            $scope.incompleteText = $scope.currentChallenge.punctuation;
+            $scope.correctText = $scope.currentChallenge.cText;
+
+            $scope.getMaxScore();
+            console.log($scope.currentChallenge);
+            console.log("Got the data!");
+        },
+         function failureCallback(response) {
+             console.log("Failed to get the data.");
+         });
+    }
+    $scope.fetchNewChallengeFromDatabase();
 
 	if($scope.incompleteText.length != $scope.correctText.length)
 	{
@@ -58,10 +72,6 @@ correcttext.controller("CorrectTextController", function ($scope, $http)
 			}
 		}
 	};
-
-	$scope.getMaxScore();
-	$scope.score = 0;
-
 	$scope.calculateScore = function()
 	{
 		console.log("Calculating score..");
@@ -89,11 +99,49 @@ correcttext.controller("CorrectTextController", function ($scope, $http)
 				}
 			}
 		}
+
+		if ($scope.score != $scope.maxScore)
+		{
+		    $scope.showcorrectanswer = true;
+		    console.log("Showing correct answer..");
+		}
+		else
+		{
+		    $scope.showcorrectanswer = false;
+		}
+
+		$scope.newChallenge();
 	};
 
 	$scope.newChallenge = function ()
 	{
+	    $scope.totalScore += $scope.score;
+	    $scope.totalScoreMax += $scope.maxScore;
 
+	    $scope.score = 0;
+	    $scope.maxScore = 0;
+
+
+	    if ($scope.challengeCount >= $scope.maxChallengesToDo)
+	    {
+	        // todo: redirect to some score page.
+	        $scope.showchallenge = false;
+	    }
+	    if($scope.randomChallenge == true)
+	    {
+	        $scope.challengeIndex = Math.floor(Math.random() * $scope.challengeDb.length);
+	        console.log("New random challenge: ", $scope.challengeIndex);
+	    }
+	    else
+	    {
+	        if($scope.challengeIndex++ >= $scope.challengeDb.length)
+	        {
+	            $scope.challengeIndex = 0;
+	        }
+	    }
+	    $scope.challengeCount++;
+	    $scope.currentChallenge = $scope.challengeDb[$scope.challengeIndex];
+	    $scope.fetchNewChallengeFromDatabase();
 	};
 
 });
@@ -101,12 +149,17 @@ correcttext.controller("CorrectTextController", function ($scope, $http)
     </script>
 </head>
 <body ng-controller="CorrectTextController">
-    {{ incompleteText }}
-    <br>
-    <input type="text" ng-model="playerInput">
-    <input type="submit" ng-click="calculateScore()">
-    {{ playerInput }}
-    {{score}}/{{ maxScore }}
+    <div ng-show="showchallenge">
+        {{ incompleteText }}
+        <br>
+        <input type="text" ng-model="playerInput">
+        <input type="submit" ng-click="calculateScore()">
+        <p ng-show="showcorrectanswer">The correct answer was: {{ correctText }}</p>
+        <div>Total score: {{ totalScore}}/{{ totalScoreMax }}</div>
+    </div>
+    <div ng-hide="showchallenge">
+        <h1>Congratulations! You got {{ totalScore }} out of {{ totalScoreMax }} points! </h1>
+    </div>
 </body>
 </html>
 
