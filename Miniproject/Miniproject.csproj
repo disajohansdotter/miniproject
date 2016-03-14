@@ -102,6 +102,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -117,6 +118,7 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\clickColorsController.cs" />
+    <Compile Include="Controllers\correctTextsController.cs" />
     <Compile Include="DataAccess\MPContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -138,6 +140,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\clickColors\Index.cshtml" />
     <Content Include="Views\clickColors\test.cshtml" />
+    <Content Include="Views\correctTexts\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -1,0 +1,112 @@
+﻿@model Miniproject.Models.correctText
+
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<!doctype html>
+<meta charset="UTF8">
+
+<html ng-app="correcttext">
+
+<head>
+    <title></title>
+    <script src="~/Scripts/angular.js"></script>
+    <script>
+var correcttext = angular.module("correcttext", []);
+
+correcttext.controller("CorrectTextController", function ($scope, $http)
+{
+    
+    $scope.incompleteText = "";
+    $scope.correctText = "";
+    $scope.challengeCount = 0;
+	$http({
+	 	method: 'GET',
+	 	url: '/correctTexts/GetChallenges'
+
+	 }).then(function successCallback(response)
+	 {
+	     $scope.challengeDb = response.data[0];
+
+	     $scope.incompleteText = $scope.challengeDb.punctuation;
+	     $scope.correctText = $scope.challengeDb.cText;
+
+	     console.log($scope.challengeDb);
+	     console.log("Got the data!");
+	 },
+	 function failureCallback(response)
+	 {
+	     console.log("Failed to get the data.");
+	 });
+    
+
+	if($scope.incompleteText.length != $scope.correctText.length)
+	{
+		console.log("Error: incompleteText and correctText are of different lengths");
+	}
+
+	$scope.getMaxScore = function()
+	{
+		$scope.maxScore = 0;
+		for (var i = $scope.incompleteText.length - 1; i >= 0; i--)
+		{
+			if($scope.incompleteText[i] == '*')
+			{
+				$scope.maxScore++;
+			}
+		}
+	};
+
+	$scope.getMaxScore();
+	$scope.score = 0;
+
+	$scope.calculateScore = function()
+	{
+		console.log("Calculating score..");
+		if($scope.playerInput.length != $scope.incompleteText.length)
+		{
+			console.log("Input is not of the correct length.");
+		}
+		var stopCount = 0;
+		if($scope.playerInput.length > $scope.incompleteText.length)
+		{
+			stopCount = $scope.incompleteText.length;
+		}
+		else
+		{
+			stopCount = $scope.playerInput.length;
+		}
+
+		for (var i = 0; i < stopCount; i++)
+		{
+			if($scope.incompleteText[i] == '*')
+			{
+				if($scope.playerInput[i] == $scope.correctText[i])
+				{
+					$scope.score++;
+				}
+			}
+		}
+	};
+
+	$scope.newChallenge = function ()
+	{
+
+	};
+
+});
+
+    </script>
+</head>
+<body ng-controller="CorrectTextController">
+    {{ incompleteText }}
+    <br>
+    <input type="text" ng-model="playerInput">
+    <input type="submit" ng-click="calculateScore()">
+    {{ playerInput }}
+    {{score}}/{{ maxScore }}
+</body>
+</html>
+
