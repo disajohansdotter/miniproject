@@ -30,7 +30,7 @@ correcttext.controller("CorrectTextController", function ($scope, $http)
     $scope.maxScore = 0;
     $scope.showcorrectanswer = false;
     $scope.showchallenge = true;
-
+    $scope.lastCorrectAnswer = "";
     $scope.totalScore = 0;
     $scope.totalScoreMax = 0;
 
@@ -54,9 +54,10 @@ correcttext.controller("CorrectTextController", function ($scope, $http)
              console.log("Failed to get the data.");
          });
     }
+
     $scope.fetchNewChallengeFromDatabase();
 
-	if($scope.incompleteText.length != $scope.correctText.length)
+	if($scope.incompleteText.length != $scope.correctText.length) 
 	{
 		console.log("Error: incompleteText and correctText are of different lengths");
 	}
@@ -104,12 +105,12 @@ correcttext.controller("CorrectTextController", function ($scope, $http)
 		{
 		    $scope.showcorrectanswer = true;
 		    console.log("Showing correct answer..");
+		    $scope.lastCorrectAnswer = $scope.correctText;
 		}
 		else
 		{
 		    $scope.showcorrectanswer = false;
 		}
-
 		$scope.newChallenge();
 	};
 
@@ -121,6 +122,7 @@ correcttext.controller("CorrectTextController", function ($scope, $http)
 	    $scope.score = 0;
 	    $scope.maxScore = 0;
 
+	    $scope.playerInput = "";
 
 	    if ($scope.challengeCount >= $scope.maxChallengesToDo)
 	    {
@@ -150,12 +152,13 @@ correcttext.controller("CorrectTextController", function ($scope, $http)
 </head>
 <body ng-controller="CorrectTextController">
     <div ng-show="showchallenge">
-        {{ incompleteText }}
+        <div>{{ incompleteText }}</div>
         <br>
         <input type="text" ng-model="playerInput">
         <input type="submit" ng-click="calculateScore()">
-        <p ng-show="showcorrectanswer">The correct answer was: {{ correctText }}</p>
+        <p ng-show="showcorrectanswer">The correct answer was: {{ lastCorrectAnswer }}</p>
         <div>Total score: {{ totalScore}}/{{ totalScoreMax }}</div>
+        <div> Challenge {{ challengeCount }} of {{ maxChallengesToDo }}</div>
     </div>
     <div ng-hide="showchallenge">
         <h1>Congratulations! You got {{ totalScore }} out of {{ totalScoreMax }} points! </h1>
